@@ -1,4 +1,4 @@
-import Image from "next/image";
+//
 
 async function fetchSchools(baseUrl: string) {
   const res = await fetch(`${baseUrl}/api/schools`, { cache: "no-store" });
@@ -15,7 +15,7 @@ export default async function ShowSchoolsPage() {
     <section className="section">
       <h1 style={{ marginBottom: 12 }}>Schools</h1>
       <div className="grid">
-        {schools.map((s: any) => (
+        {schools.map((s: { id: number; name: string; address: string; city: string; state: string; image: string; }) => (
           <div key={s.id} className="card">
             <div style={{ position: "relative", width: "100%", height: 160 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}

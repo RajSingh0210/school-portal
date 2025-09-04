@@ -45,3 +45,5 @@ next-env.d.ts
 # uploaded images (keep folder, ignore files)
 /public/schoolImages/*
 !/public/schoolImages/.gitkeep
+app/generated/prisma/**
+public/schoolImages/**
