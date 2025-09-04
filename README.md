@@ -1,3 +1,43 @@
+## School Portal
+
+Two pages app:
+- `addSchool`: add a school with image upload (validated with react-hook-form + zod)
+- `showSchools`: list schools like product cards (name, address, city, image)
+
+### Requirements
+- Node 18+
+- MySQL 8+
+
+### 1) Configure database
+Create a MySQL database, e.g. `schools_db`, and a user with privileges.
+
+Set `DATABASE_URL` in `.env` (already created by Prisma) like:
+
+```
+DATABASE_URL="mysql://USER:PASSWORD@localhost:3306/schools_db"
+```
+
+### 2) Migrate schema and generate client
+
+```
+npx prisma migrate dev --name init
+npx prisma generate
+```
+
+### 3) Run the app
+
+```
+npm run dev
+```
+
+Open `http://localhost:3000`.
+
+### API
+- `POST /api/schools` (multipart/form-data): fields `name,address,city,state,contact,email_id,image`
+- `GET /api/schools`: list all schools
+
+Images are saved under `public/schoolImages`.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
