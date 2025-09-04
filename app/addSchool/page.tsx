@@ -11,7 +11,9 @@ const schema = z.object({
   state: z.string().min(1, "Required"),
   contact: z.string().min(5, "Required"),
   email_id: z.string().email("Invalid email"),
-  image: z.any(),
+  image: z.custom<FileList>((val) => typeof window !== "undefined" && val instanceof FileList && val.length >= 1, {
+    message: "Image is required",
+  }),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -22,10 +24,13 @@ export default function AddSchoolPage() {
 
   const onSubmit = async (values: FormValues) => {
     const formData = new FormData();
-    for (const key of ["name","address","city","state","contact","email_id"]) {
-      formData.append(key, (values as any)[key]);
-    }
-    const fileList = (values as any).image as FileList;
+    formData.append("name", values.name);
+    formData.append("address", values.address);
+    formData.append("city", values.city);
+    formData.append("state", values.state);
+    formData.append("contact", values.contact);
+    formData.append("email_id", values.email_id);
+    const fileList: FileList = values.image as unknown as FileList;
     if (fileList && fileList[0]) formData.append("image", fileList[0]);
 
     setSubmitting(true);
