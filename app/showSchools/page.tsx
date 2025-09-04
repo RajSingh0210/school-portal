@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { headers } from "next/headers";
 
 async function fetchSchools(baseUrl: string) {
   const res = await fetch(`${baseUrl}/api/schools`, { cache: "no-store" });
@@ -8,10 +7,9 @@ async function fetchSchools(baseUrl: string) {
 }
 
 export default async function ShowSchoolsPage() {
-  const hdrs = headers();
-  const host = hdrs.get("x-forwarded-host") ?? hdrs.get("host");
-  const proto = hdrs.get("x-forwarded-proto") ?? "http";
-  const baseUrl = `${proto}://${host}`;
+  const baseUrl = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000";
   const schools = await fetchSchools(baseUrl);
   return (
     <section className="section">

@@ -32,6 +32,12 @@ npm run dev
 
 Open `http://localhost:3000`.
 
+### Deploying to Vercel with uploads
+- Set env vars in Vercel Project Settings:
+  - `DATABASE_URL` (to your hosted MySQL)
+  - `BLOB_READ_WRITE_TOKEN` (from Vercel > Storage > Blob)
+- The API uploads images to Vercel Blob storage and saves the public URL in DB.
+
 ### API
 - `POST /api/schools` (multipart/form-data): fields `name,address,city,state,contact,email_id,image`
 - `GET /api/schools`: list all schools

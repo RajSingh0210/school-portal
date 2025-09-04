@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 import { z } from "zod";
-import { promises as fs } from "fs";
-import path from "path";
+import { put } from "@vercel/blob";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -30,14 +29,8 @@ export async function POST(req: NextRequest) {
 
     const file = formData.get("image") as File | null;
     if (!file) return NextResponse.json({ error: "Image is required" }, { status: 400 });
-
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    const uploadsDir = path.join(process.cwd(), "public", "schoolImages");
-    await fs.mkdir(uploadsDir, { recursive: true });
-    const fileName = `${Date.now()}_${file.name.replace(/\s+/g, "_")}`;
-    const filePath = path.join(uploadsDir, fileName);
-    await fs.writeFile(filePath, buffer);
+    const blobName = `schools/${Date.now()}-${file.name.replace(/\s+/g, "_")}`;
+    const { url } = await put(blobName, file, { access: "public" });
 
     const created = await prisma.school.create({
       data: {
@@ -47,7 +40,7 @@ export async function POST(req: NextRequest) {
         state: parsed.data.state,
         contact: parsed.data.contact,
         email_id: parsed.data.email_id,
-        image: `/schoolImages/${fileName}`,
+        image: url,
       },
     });
 
