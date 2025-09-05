@@ -1,4 +1,6 @@
 import { prisma } from "@/app/lib/prisma";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function ShowSchoolsPage() {
   const schools = await prisma.school.findMany({ orderBy: { createdAt: "desc" } });
