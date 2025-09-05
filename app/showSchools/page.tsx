@@ -1,16 +1,7 @@
-//
-
-async function fetchSchools(baseUrl: string) {
-  const res = await fetch(`${baseUrl}/api/schools`, { cache: "no-store" });
-  if (!res.ok) throw new Error("Failed to load");
-  return res.json();
-}
+import { prisma } from "@/app/lib/prisma";
 
 export default async function ShowSchoolsPage() {
-  const baseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000";
-  const schools = await fetchSchools(baseUrl);
+  const schools = await prisma.school.findMany({ orderBy: { createdAt: "desc" } });
   return (
     <section className="section">
       <h1 style={{ marginBottom: 12 }}>Schools</h1>
