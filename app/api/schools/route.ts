@@ -37,6 +37,8 @@ export async function POST(req: NextRequest) {
         const blobName = `schools/${Date.now()}-${file.name.replace(/\s+/g, "_")}`;
         const { url } = await put(blobName, file, { access: "public" });
         imageUrl = url;
+      } else if (process.env.VERCEL) {
+        return NextResponse.json({ error: "Uploads require BLOB_READ_WRITE_TOKEN on Vercel" }, { status: 500 });
       } else {
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
